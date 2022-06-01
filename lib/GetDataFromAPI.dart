@@ -349,6 +349,7 @@ class GetDataFromAPI {
   }
 
 
+  //Prefs e kaydedilmiş olan last title Id yi alıyoruz
   Future<String> GetLastTitle() async {
 
     final SharedPreferences prefs = await _prefs;

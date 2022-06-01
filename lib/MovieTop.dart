@@ -20,29 +20,26 @@ class _MovieTopState extends State<MovieTop> {
   //Video tam ekran olunca gerekli ayarlar burada yapılıyor
   double widthFactor = 0.6;
   double heightFactor = 0.5;
-  EdgeInsetsGeometry fullHeightPadding = EdgeInsets.fromLTRB(10, 50, 10, 10);
+  EdgeInsetsGeometry fullHeightPadding = EdgeInsets.fromLTRB(10, 0, 10, 10);
 
   //Veri gelmediğinde de görünen temel sayfa görünümü
   Widget BasePage(Widget childWidget) {
     return Container(
       padding: fullHeightPadding,
-      child: SingleChildScrollView(
-          reverse:  true,
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Card(
-            color: appColors.clrDark,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(25)),
-            ),
-            elevation: 25,
-            shadowColor: Colors.black,
-            child: Container(
-                height: phoneHeight * heightFactor,
-                width: phoneWidth * widthFactor,
-                alignment: Alignment.center,
-                child: childWidget
-            ),
-          )),
+      child: Card(
+        color: appColors.clrDark,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(25)),
+        ),
+        elevation: 25,
+        shadowColor: Colors.black,
+        child: Container(
+            height: phoneHeight * heightFactor,
+            width: phoneWidth * widthFactor,
+            alignment: Alignment.center,
+            child: childWidget
+        ),
+      ),
     );
   }
 

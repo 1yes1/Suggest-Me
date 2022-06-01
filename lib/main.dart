@@ -7,7 +7,7 @@ import 'package:SuggestME/MovieBottom.dart';
 import 'package:SuggestME/MovieTop.dart';
 import 'package:SuggestME/SuggestParameters.dart';
 import 'APIData.dart';
-import 'ApiPage.dart';
+import 'AboutMe.dart';
 import 'AppColors.dart';
 import 'FlashMessage.dart';
 import 'GetDataFromAPI.dart';
@@ -65,7 +65,7 @@ class MainPage extends StatelessWidget {
           phoneHeight = MediaQuery.of(context).size.height;
           return HomePage();
         },
-        "/ApiPage": (context) => MyAPIPage(),
+        "/AboutMe": (context) => AboutMe(),
       },
     );
   }
@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    PrefsRemove();
+    // PrefsRemove();
 
     StartShowTitle();
 
@@ -134,6 +134,10 @@ class _HomePageState extends State<HomePage> {
       }else{
         titleIdNow = result;
         print("GetPrefsLastTitleId Çalıştı: " + titleIdNow);
+        //Başlangıçta yüklenen son filmi yine başlangıç olarak atıyoruz
+        //Böylece SuggestMe butonuna tıklanmadan uygulama yine kapatılırsa yine bu filmi gösterelim
+        lastTitleId = titleIdNow;
+        SetPrefsLastTitleId();
 
         ShowMovieWithTitle();
       }
@@ -224,11 +228,7 @@ class _HomePageState extends State<HomePage> {
                   !snapshot.hasData) {
                 isDataLoaded = false;
                 widgetTurn = [
-                  Container(
-                    color: appColors.clrDark,
-                    height: phoneHeight,
-                    child: Center(child: CircularProgressIndicator()),
-                  )
+                  LoadingIndicator()
                 ];
               } else if (snapshot.hasError) {
                 isDataLoaded = false;
@@ -299,11 +299,6 @@ class _HomePageState extends State<HomePage> {
                   SuggestParameters.pageChangeCount = 0;
                   SuggestParameters.lookedPages.clear();
 
-                  SchedulerBinding.instance?.addPostFrameCallback((_) {
-                    setState(() {
-                    });
-                  });
-
                 }
                 else if(snapshot.data!.toString() == "no-internet"){
 
@@ -346,7 +341,6 @@ class _HomePageState extends State<HomePage> {
 
                   SuggestParameters.pageChangeCount = 0;
                   SuggestParameters.lookedPages.clear();
-
 
                   SchedulerBinding.instance?.addPostFrameCallback((_) {
                     setState(() {
@@ -459,7 +453,7 @@ class _HomePageState extends State<HomePage> {
   Widget LoadingIndicator(){
     return Container(
       color: appColors.clrDark,
-      height: phoneHeight,
+      height: phoneHeight - 100,
       child: Center(child: CircularProgressIndicator()),
     );
   }
@@ -468,7 +462,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: appColors.clrDark,
-      body: Stack(children: [
+      body: Stack(
+          children: [
         Column(
           children: [
             Expanded(
@@ -608,7 +603,45 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-      ]),
+      ]
+      ),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        toolbarHeight: 50,
+      ),
+      drawer: Container(
+        width: 250,
+        child: Drawer(
+          backgroundColor: appColors.clrDark,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              InkWell(
+                onTap: () {},
+                child: Container(
+                  color: appColors.clrRed.withOpacity(0.9),
+                  padding: EdgeInsets.all(10),
+                  width: phoneWidth,
+                  alignment: Alignment.center,
+                  child: Text("Home",style: TextStyle(fontSize: 22,color: Colors.white,fontFamily: "Montserrat",),),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, '/AboutMe');
+                },
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  width: phoneWidth,
+                  alignment: Alignment.center,
+                  child: Text("About Me",style: TextStyle(fontSize: 22,color: Colors.white,fontFamily: "Montserrat",),),
+                ),
+              )
+            ],
+          ),
+        ),
+      )
     );
   }
 
